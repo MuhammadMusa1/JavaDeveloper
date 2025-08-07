@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Многопоточность в Java</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        pre {
+            overflow-x: auto;
+            max-height: 300px;
+            font-size: 0.9rem;
+        }
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        .slide {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            min-height: 450px;
+        }
+        .slide-number {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .highlight {
+            background-color: #e0f2fe;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+        }
+        img {
+            max-height: 120px;
+            border-radius: 0.5rem;
+            margin: 1rem auto;
+            display: block;
+        }
+        .task {
+            background-color: #fef3c7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-8">
+        <!-- Слайд 1: Титульный -->
+        <div class="slide">
+            <span class="slide-number">Слайд 1</span>
+            <h1 class="text-4xl font-bold text-blue-600 text-center">Многопоточность в Java</h1>
+            <p class="text-xl mt-4 text-center">Для Junior-разработчиков</p>
+            <p class="text-lg mt-2 text-center">Эффективная и безопасная работа с потоками</p>
+            
+        </div>
+
+        <!-- Слайд 2: Что такое многопоточность? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 2</span>
+            <h2>Что такое многопоточность?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Многопоточность</span>: Выполнение нескольких задач одновременно.</li>
+                <li><span class="highlight">Аналогия</span>: Один повар готовит суп, другой — салат.</li>
+                <li>Поток: Как повар, выполняющий одну задачу.</li>
+                <li>Процесс: Как кухня, где работают повара.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Что такое поток?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 3: Зачем нужна многопоточность? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 3</span>
+            <h2>Зачем нужна многопоточность?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Ускоряет работу: Использует многоядерные процессоры.</li>
+                <li>Делает интерфейс отзывчивым: Не "замораживает" GUI.</li>
+                <li>Экономит время: Параллельные задачи (скачивание, расчёты).</li>
+                <li>Пример: Банкомат Ориёнбанка обрабатывает транзакции и показывает рекламу.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Кухня с поварами”.</p>
+        </div>
+
+        <!-- Слайд 4: Классический подход: Thread -->
+        <div class="slide">
+            <span class="slide-number">Слайд 4</span>
+            <h2>Классический подход: Thread</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Наследуем класс <code>Thread</code>.</li>
+                <li>Переопределяем метод <code>run()</code>.</li>
+                <li>Пример: Повар готовит одну задачу.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+public class TransactionThread extends Thread {
+    public void run() {
+        System.out.println("Обработка транзакции...");
+    }
+}
+
+TransactionThread thread = new TransactionThread();
+thread.start(); // Запускаем поток
+            </pre>
+        </div>
+
+        <!-- Слайд 5: Классический подход: Runnable -->
+        <div class="slide">
+            <span class="slide-number">Слайд 5</span>
+            <h2>Классический подход: Runnable</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Реализуем интерфейс <code>Runnable</code>.</li>
+                <li>Гибче: Можно наследовать другой класс.</li>
+                <li>Пример: Повар, выполняющий задачу банка.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+public class TransactionTask implements Runnable {
+    public void run() {
+        System.out.println("Обработка транзакции...");
+    }
+}
+
+Runnable task = new TransactionTask();
+Thread thread = new Thread(task);
+thread.start(); // Запускаем поток
+            </pre>
+        </div>
+
+        <!-- Слайд 6: Почему Runnable лучше? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 6</span>
+            <h2>Почему Runnable лучше?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Гибкость: Можно наследовать другой класс.</li>
+                <li>Разделение: Логика задачи отделена от потока.</li>
+                <li><span class="highlight">Deitel</span>: Рекомендуют Runnable для лучшей структуры.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Почему выбирают Runnable вместо Thread?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 7: Современный подход: ExecutorService -->
+        <div class="slide">
+            <span class="slide-number">Слайд 7</span>
+            <h2>Современный подход: ExecutorService</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Пул потоков: Управляет потоками за вас.</li>
+                <li>Простота: Меньше кода, больше контроля.</li>
+                <li>Пример: Повара на кухне Ориёнбанка работают по расписанию.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=Thread+Pool" alt="Пул потоков">
+        </div>
+
+        <!-- Слайд 8: Код ExecutorService -->
+        <div class="slide">
+            <span class="slide-number">Слайд 8</span>
+            <h2>Код: ExecutorService</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+ExecutorService executor = Executors.newFixedThreadPool(2);
+executor.submit(() -> System.out.println("Транзакция 1..."));
+executor.submit(() -> System.out.println("Транзакция 2..."));
+executor.shutdown(); // Завершаем работу
+            </pre>
+            <p class="mt-2 text-lg">Пул управляет потоками автоматически!</p>
+        </div>
+
+        <!-- Слайд 9: Почему ExecutorService? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 9</span>
+            <h2>Почему ExecutorService?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Экономит ресурсы: Переиспользует потоки.</li>
+                <li>Простота: Лямбда-выражения вместо классов.</li>
+                <li>Современный стандарт: Рекомендуется вместо Thread.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Пул потоков”.</p>
+        </div>
+
+        <!-- Слайд 10: Состояние гонки -->
+        <div class="slide">
+            <span class="slide-number">Слайд 10</span>
+            <h2>Состояние гонки</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Состояние гонки</span>: Когда потоки мешают друг другу.</li>
+                <li>Пример: Два повара одновременно берут деньги из кассы.</li>
+                <li>Проблема: Неправильный баланс в банкомате.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+int balance = 1000; // Общий ресурс
+// Поток 1
+balance -= 500; // Читает 1000, вычитает 500
+// Поток 2
+balance -= 300; // Читает 1000, вычитает 300
+// Результат: 700 вместо 200
+            </pre>
+        </div>
+
+        <!-- Слайд 11: Синхронизация: Классика -->
+        <div class="slide">
+            <span class="slide-number">Слайд 11</span>
+            <h2>Синхронизация: Классический подход</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">synchronized</span>: Один поток за раз.</li>
+                <li><span class="highlight">Deitel</span>: Используйте для защиты данных.</li>
+                <li>Пример: Только один повар работает с кассой.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+public class BankAccount {
+    private int balance = 1000;
+
+    public synchronized void withdraw(int amount) {
+        balance -= amount;
+    }
+}
+            </pre>
+        </div>
+
+        <!-- Слайд 12: Синхронизация: Современные инструменты -->
+        <div class="slide">
+            <span class="slide-number">Слайд 12</span>
+            <h2>Синхронизация: Современные инструменты</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">AtomicInteger</span>: Безопасные операции без блокировок.</li>
+                <li><span class="highlight">ReentrantLock</span>: Гибче, чем synchronized.</li>
+                <li><span class="highlight">ConcurrentHashMap</span>: Безопасная коллекция.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import java.util.concurrent.atomic.AtomicInteger;
+
+AtomicInteger balance = new AtomicInteger(1000);
+balance.addAndGet(-500); // Безопасное вычитание
+            </pre>
+        </div>
+
+        <!-- Слайд 13: Состояния потока -->
+        <div class="slide">
+            <span class="slide-number">Слайд 13</span>
+            <h2>Состояния потока</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">New</span>: Создан, но не запущен.</li>
+                <li><span class="highlight">Runnable</span>: Готов к выполнению.</li>
+                <li><span class="highlight">Running</span>: Выполняется.</li>
+                <li><span class="highlight">Blocked</span>: Ждёт (например, synchronized).</li>
+                <li><span class="highlight">Terminated</span>: Завершён.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Жизненный цикл потока”.</p>
+        </div>
+
+        <!-- Слайд 14: join() и sleep() -->
+        <div class="slide">
+            <span class="slide-number">Слайд 14</span>
+            <h2>join() и sleep()</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">join()</span>: Ждёт завершения потока.</li>
+                <li><span class="highlight">sleep()</span>: Приостанавливает поток.</li>
+                <li>Пример: Ждём, пока повар закончит блюдо.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+Thread thread = new Thread(() -> System.out.println("Работа..."));
+thread.start();
+thread.join(); // Ждём завершения
+Thread.sleep(1000); // Пауза 1 сек
+            </pre>
+        </div>
+
+        <!-- Слайд 15: Когда использовать? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 15</span>
+            <h2>Когда использовать многопоточность?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Параллельные вычисления: Обработка транзакций.</li>
+                <li>Асинхронные операции: Скачивание данных.</li>
+                <li>Отзывчивый GUI: Не замораживать интерфейс.</li>
+                <li>Пример: Банкомат Ориёнбанка обрабатывает платёж в фоне.</li>
+            </ul>
+        </div>
+
+        <!-- Слайд 16: Когда не использовать? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 16</span>
+            <h2>Когда не использовать?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Простые задачи: Накладные расходы на потоки.</li>
+                <li>Маленькие данные: Один поток быстрее.</li>
+                <li>Пример: Не создавайте поток для вывода текста.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Когда потоки избыточны?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 17: Частые ошибки -->
+        <div class="slide">
+            <span class="slide-number">Sлайд 17</span>
+            <h2>Частые ошибки</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Deadlock</span>: Два повара ждут друг друга.</li>
+                <li>Вызов <code>run()</code> вместо <code>start()</code>.</li>
+                <li>Отсутствие синхронизации: Неправильный баланс.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+Thread thread = new Thread(() -> System.out.println("Ошибка"));
+thread.run(); // Неправильно: не создаёт поток
+thread.start(); // Правильно
+            </pre>
+        </div>
+
+        <!-- Слайд 18: Deadlock -->
+        <div class="slide">
+            <span class="slide-number">Слайд 18</span>
+            <h2>Deadlock: Взаимная блокировка</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Потоки блокируют друг друга.</li>
+                <li>Пример: Два повара ждут один нож.</li>
+                <li>Избегайте: Упрощайте синхронизацию.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Два повара и нож”.</p>
+        </div>
+
+        <!-- Слайд 19: Связь с другими темами -->
+        <div class="slide">
+            <span class="slide-number">Слайд 19</span>
+            <h2>Связь с другими темами</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Коллекции</span>: ConcurrentHashMap для потоков.</li>
+                <li><span class="highlight">Веб</span>: Spring Boot использует потоки для запросов.</li>
+                <li><span class="highlight">Big O</span>: Потоки ускоряют сложные задачи (O(n)).</li>
+            </ul>
+            <p>Пример: Сервер Ориёнбанка обрабатывает запросы параллельно.</p>
+        </div>
+
+        <!-- Слайд 20: Как работает и итоги -->
+        <div class="slide">
+            <span class="slide-number">Слайд 20</span>
+            <h2>Как работает и итоги</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Java Memory Model</span>: Гарантирует видимость данных (<code>volatile</code>).</li>
+                <li><span class="highlight">Deitel</span>: Потоки для скорости, но с осторожностью.</li>
+                <li>Современный совет: Используйте ExecutorService и Atomic.</li>
+                <li>Итог: Потоки делают программы быстрыми и отзывчивыми!</li>
+            </ul>
+            <p class="mt-4 text-center text-blue-600 font-bold">Вопросы?</p>
+        </div>
+    </div>
+</body>
+</html>

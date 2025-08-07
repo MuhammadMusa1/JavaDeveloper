@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Протоколы финансовых транзакций и обмена сообщениями в Java</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        pre {
+            overflow-x: auto;
+            max-height: 300px;
+            font-size: 0.9rem;
+        }
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        .slide {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            min-height: 450px;
+        }
+        .slide-number {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .highlight {
+            background-color: #e0f2fe;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+        }
+        img {
+            max-height: 120px;
+            border-radius: 0.5rem;
+            margin: 1rem auto;
+            display: block;
+        }
+        .task {
+            background-color: #fef3c7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-8">
+        <!-- Слайд 1: Титульный -->
+        <div class="slide">
+            <span class="slide-number">Слайд 1</span>
+            <h1 class="text-4xl font-bold text-blue-600 text-center">Протоколы финансовых транзакций в Java</h1>
+            <p class="text-xl mt-4 text-center">Для Junior-разработчиков</p>
+            <p class="text-lg mt-2 text-center">Как банки общаются между собой</p>
+            <img src="https://via.placeholder.com/150x120?text=Bank+Network" alt="Сеть банков">
+        </div>
+
+        <!-- Слайд 2: Зачем знать протоколы? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 2</span>
+            <h2>Зачем знать протоколы?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Финансовые протоколы</span>: Единый язык для банков и платёжных систем.</li>
+                <li><span class="highlight">Аналогия</span>: Как общий язык для поваров на кухне.</li>
+                <li>Необходимы для финтеха: Как SQL для баз данных.</li>
+                <li>Пример: Ориёнбанк отправляет платёж за границу.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Почему протоколы важны для финтеха?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 3: Какие протоколы рассмотрим? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 3</span>
+            <h2>Какие протоколы рассмотрим?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">ISO 8583</span>: Для карточных транзакций.</li>
+                <li><span class="highlight">SWIFT</span>: Международные платежи (MT/MX).</li>
+                <li><span class="highlight">ISO 20022</span>: Универсальный стандарт (XML).</li>
+                <li><span class="highlight">SOAP/REST</span>: API для финтеха.</li>
+                <li><span class="highlight">MQ</span>: Надёжный обмен сообщениями.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Экосистема финансов”.</p>
+        </div>
+
+        <!-- Слайд 4: ISO 8583 -->
+        <div class="slide">
+            <span class="slide-number">Слайд 4</span>
+            <h2>ISO 8583: Карточные транзакции</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Стандарт для банкоматов и POS-терминалов.</li>
+                <li>Бинарный формат: Компактный, но сложный.</li>
+                <li>Пример: Платёж картой в Ориёнбанке.</li>
+                <li><span class="highlight">Аналогия</span>: Как заказ в ресторане: чёткие поля.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=ISO8583" alt="Карточный платёж">
+        </div>
+
+        <!-- Слайд 5: Структура ISO 8583 -->
+        <div class="slide">
+            <span class="slide-number">Слайд 5</span>
+            <h2>Структура ISO 8583</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">MTI</span>: Тип сообщения (например, 0200 — запрос).</li>
+                <li><span class="highlight">Bitmap</span>: Указывает, какие поля включены.</li>
+                <li><span class="highlight">Data Elements</span>: Данные (сумма, номер карты).</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+MTI: 0200
+Bitmap: 7F22000000000000
+DE2: 1234567890123456 (номер карты)
+DE4: 000000010000 (1000 TJS)
+            </pre>
+            <p><strong>Визуализация:</strong> Схема: “Сообщение ISO 8583”.</p>
+        </div>
+
+        <!-- Слайд 6: Код ISO 8583 (j8583) -->
+        <div class="slide">
+            <span class="slide-number">Слайд 6</span>
+            <h2>Код: ISO 8583 с j8583</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import com.solab.iso8583.IsoMessage;
+
+IsoMessage msg = new IsoMessage();
+msg.setType(0x200); // Запрос авторизации
+msg.setField(2, "1234567890123456"); // Номер карты
+msg.setField(4, "1000"); // Сумма
+msg.setField(49, "TJS"); // Валюта
+            </pre>
+            <p class="mt-2 text-lg">Создаём сообщение для Ориёнбанка.</p>
+        </div>
+
+        <!-- Слайд 7: Особенности ISO 8583 -->
+        <div class="slide">
+            <span class="slide-number">Слайд 7</span>
+            <h2>Особенности ISO 8583</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Бинарный: Компактный, но сложный для чтения.</li>
+                <li>Bitmap: Показывает активные поля.</li>
+                <li>Библиотеки: Используйте j8583 или jPOS.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Зачем нужна Bitmap?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 8: SWIFT -->
+        <div class="slide">
+            <span class="slide-number">Слайд 8</span>
+            <h2>SWIFT: Международные платежи</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">SWIFT</span>: Сеть для банковских переводов.</li>
+                <li><span class="highlight">MT</span>: Текстовые сообщения (старый формат).</li>
+                <li><span class="highlight">MX</span>: XML-сообщения (новый формат).</li>
+                <li>Пример: Перевод из Ориёнбанка в другой банк.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=SWIFT" alt="Международный перевод">
+        </div>
+
+        <!-- Слайд 9: Пример MT и MX -->
+        <div class="slide">
+            <span class="slide-number">Слайд 9</span>
+            <h2>Пример: MT и MX</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+// MT103 (перевод)
+:20:TRANS123
+:32A:250807USD1000,00
+:50K:Ali Sherov
+:59:/123456789
+Orienbank, Dushanbe
+
+// MX (pain.001, ISO 20022)
+<PmtInf>
+    <PmtId>TRANS123</PmtId>
+    <Amt>1000.00</Amt>
+    <Ccy>USD</Ccy>
+</PmtInf>
+            </pre>
+            <p class="mt-2 text-lg">MT — текст, MX — XML.</p>
+        </div>
+
+        <!-- Слайд 10: Код SWIFT (JAXB) -->
+        <div class="slide">
+            <span class="slide-number">Слайд 10</span>
+            <h2>Код: SWIFT MX с JAXB</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import javax.xml.bind.annotation.*;
+
+@XmlRootElement(name = "PmtInf")
+public class PaymentInfo {
+    @XmlElement(name = "PmtId")
+    private String paymentId;
+    @XmlElement(name = "Amt")
+    private double amount;
+
+    // Геттеры/Сеттеры
+}
+            </pre>
+            <p class="mt-2 text-lg">Парсинг MX-сообщений в Java.</p>
+        </div>
+
+        <!-- Слайд 11: Особенности SWIFT -->
+        <div class="slide">
+            <span class="slide-number">Слайд 11</span>
+            <h2>Особенности SWIFT</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>MT: Фиксированный текстовый формат.</li>
+                <li>MX: XML, переход к ISO 20022.</li>
+                <li>Безопасность: Высокая надёжность сети.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “SWIFT-сообщение”.</p>
+        </div>
+
+        <!-- Слайд 12: ISO 20022 -->
+        <div class="slide">
+            <span class="slide-number">Слайд 12</span>
+            <h2>ISO 20022: Универсальный стандарт</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>XML-формат для всех финансовых операций.</li>
+                <li>Гибкий и читаемый.</li>
+                <li>Пример: Платёж в Ориёнбанке.</li>
+                <li><span class="highlight">Аналогия</span>: Универсальный переводчик.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=ISO20022" alt="XML-платёж">
+        </div>
+
+        <!-- Слайд 13: Код ISO 20022 -->
+        <div class="slide">
+            <span class="slide-number">Слайд 13</span>
+            <h2>Код: ISO 20022 с JAXB</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import javax.xml.bind.JAXBContext;
+
+JAXBContext context = JAXBContext.newInstance(PaymentInfo.class);
+Unmarshaller unmarshaller = context.createUnmarshaller();
+PaymentInfo payment = (PaymentInfo) unmarshaller.unmarshal(new File("payment.xml"));
+            </pre>
+            <p class="mt-2 text-lg">XML в Java-объект.</p>
+        </div>
+
+        <!-- Слайд 14: Особенности ISO 20022 -->
+        <div class="slide">
+            <span class="slide-number">Слайд 14</span>
+            <h2>Особенности ISO 20022</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>XML: Легко читать и расширять.</li>
+                <li>Метаданные: Много информации о платеже.</li>
+                <li>Будущее: Заменяет старые стандарты.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Почему ISO 20022 популярен?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 15: SOAP/REST -->
+        <div class="slide">
+            <span class="slide-number">Слайд 15</span>
+            <h2>SOAP/REST: API для финтеха</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">REST</span>: Простой, JSON, HTTP.</li>
+                <li><span class="highlight">SOAP</span>: XML, строгий, WSDL.</li>
+                <li>Пример: Запрос баланса в Ориёнбанке.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=API" alt="API-запрос">
+        </div>
+
+        <!-- Слайд 16: Код REST -->
+        <div class="slide">
+            <span class="slide-number">Слайд 16</span>
+            <h2>Код: REST с OkHttp</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
+OkHttpClient client = new OkHttpClient();
+Request request = new Request.Builder()
+    .url("https://orienbank.tj/api/balance")
+    .build();
+Response response = client.newCall(request).execute();
+System.out.println(response.body().string());
+            </pre>
+            <p class="mt-2 text-lg">Получаем баланс через REST.</p>
+        </div>
+
+        <!-- Слайд 17: Особенности SOAP/REST -->
+        <div class="slide">
+            <span class="slide-number">Слайд 17</span>
+            <h2>Особенности SOAP/REST</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>REST: Лёгкий, популярен в финтехе.</li>
+                <li>SOAP: Строгий, для сложных систем.</li>
+                <li>HTTP: Основа для обоих.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “REST vs SOAP”.</p>
+        </div>
+
+        <!-- Слайд 18: MQ-протоколы -->
+        <div class="slide">
+            <span class="slide-number">Слайд 18</span>
+            <h2>MQ: Надёжный обмен</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Message Queue</span>: Очередь для сообщений.</li>
+                <li><span class="highlight">Аналогия</span>: Как почтовый ящик.</li>
+                <li>Пример: Ориёнбанк отправляет транзакции в очередь.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Очередь сообщений”.</p>
+        </div>
+
+        <!-- Слайд 19: Код MQ (Kafka) -->
+        <div class="slide">
+            <span class="slide-number">Слайд 19</span>
+            <h2>Код: MQ с Kafka</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import org.apache.kafka.clients.producer.*;
+
+Properties props = new Properties();
+props.put("bootstrap.servers", "localhost:9092");
+KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+producer.send(new ProducerRecord<>("transactions", "TRANS123", "1000 TJS"));
+producer.close();
+            </pre>
+            <p class="mt-2 text-lg">Отправка транзакции в очередь.</p>
+        </div>
+
+        <!-- Слайд 20: Итоги и советы -->
+        <div class="slide">
+            <span class="slide-number">Слайд 20</span>
+            <h2>Итоги и советы</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>ISO 8583: Карточные транзакции.</li>
+                <li>SWIFT: Международные платежи.</li>
+                <li>ISO 20022: Будущее финансов.</li>
+                <li>REST: Популярный API для финтеха.</li>
+                <li>MQ: Надёжная доставка.</li>
+                <li><span class="highlight">Совет</span>: Начните с REST и ISO 20022.</li>
+            </ul>
+            <p class="mt-4 text-center text-blue-600 font-bold">Вопросы?</p>
+        </div>
+    </div>
+</body>
+</html>

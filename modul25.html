@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Продвинутые компоненты GUI в JavaFX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        pre {
+            overflow-x: auto;
+            max-height: 300px;
+            font-size: 0.9rem;
+        }
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        .slide {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            min-height: 450px;
+        }
+        .slide-number {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .highlight {
+            background-color: #e0f2fe;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+        }
+        img {
+            max-height: 120px;
+            border-radius: 0.5rem;
+            margin: 1rem auto;
+            display: block;
+        }
+        .task {
+            background-color: #fef3c7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-8">
+        <!-- Слайд 1: Титульный -->
+        <div class="slide">
+            <span class="slide-number">Слайд 1</span>
+            <h1 class="text-4xl font-bold text-blue-600 text-center">Продвинутые компоненты GUI в JavaFX</h1>
+            <p class="text-xl mt-4 text-center">Для Junior-разработчиков</p>
+            <p class="text-lg mt-2 text-center">Создание сложных интерфейсов</p>
+            
+        </div>
+
+        <!-- Слайд 2: Что такое JavaFX? -->
+        <div class="slide">
+            <span class="slide-number">Слайд 2</span>
+            <h2>Что такое JavaFX?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">JavaFX</span>: Современный фреймворк для создания красивых интерфейсов.</li>
+                <li>Для чего: Десктопные приложения (Windows, Mac, Linux).</li>
+                <li><span class="highlight">Отличия от Swing/AWT</span>: Простота, CSS, богатые компоненты.</li>
+                <li><span class="highlight">Аналогия</span>: Как современный офис вместо старого кабинета.</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Почему JavaFX лучше Swing?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 3: Задача JavaFX -->
+        <div class="slide">
+            <span class="slide-number">Слайд 3</span>
+            <h2>Задача JavaFX</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Создаёт красивые приложения.</li>
+                <li>Работает на всех платформах.</li>
+                <li>Поддерживает таблицы, списки, графику.</li>
+                <li><span class="highlight">Пример</span>: Программа для сотрудников Ориёнбанка.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Офисный интерфейс”.</p>
+        </div>
+
+        <!-- Слайд 4: TableView -->
+        <div class="slide">
+            <span class="slide-number">Слайд 4</span>
+            <h2>TableView: Таблица данных</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Показывает данные в таблице.</li>
+                <li>Пример: Список сотрудников (имя, должность).</li>
+                <li><span class="highlight">Аналогия</span>: Как таблица в Excel для банка.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=TableView" alt="Таблица сотрудников">
+        </div>
+
+        <!-- Слайд 5: Код TableView -->
+        <div class="slide">
+            <span class="slide-number">Слайд 5</span>
+            <h2>Код: TableView</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.beans.property.SimpleStringProperty;
+
+public class Employee {
+    private final SimpleStringProperty name;
+    private final SimpleStringProperty role;
+
+    public Employee(String name, String role) {
+        this.name = new SimpleStringProperty(name);
+        this.role = new SimpleStringProperty(role);
+    }
+
+    public String getName() { return name.get(); }
+    public String getRole() { return role.get(); }
+}
+
+TableView<Employee> table = new TableView<>();
+TableColumn<Employee, String> nameCol = new TableColumn<>("Имя");
+nameCol.setCellValueFactory(cell -> cell.getValue().nameProperty());
+TableColumn<Employee, String> roleCol = new TableColumn<>("Должность");
+roleCol.setCellValueFactory(cell -> cell.getValue().roleProperty());
+table.getColumns().addAll(nameCol, roleCol);
+            </pre>
+            <p class="mt-2 text-lg">Таблица для сотрудников Ориёнбанка.</p>
+        </div>
+
+        <!-- Слайд 6: ListView -->
+        <div class="slide">
+            <span class="slide-number">Слайд 6</span>
+            <h2>ListView: Список элементов</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Показывает список с выбором.</li>
+                <li>Пример: Список отделов банка.</li>
+                <li><span class="highlight">Аналогия</span>: Как меню в кафе.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=ListView" alt="Список отделов">
+        </div>
+
+        <!-- Слайд 7: Код ListView -->
+        <div class="slide">
+            <span class="slide-number">Слайд 7</span>
+            <h2>Код: ListView</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import javafx.scene.control.ListView;
+import javafx.collections.FXCollections;
+
+ListView<String> listView = new ListView<>();
+listView.setItems(FXCollections.observableArrayList(
+    "Кредитный отдел", "Касса", "IT"
+));
+listView.getSelectionModel().selectedItemProperty().addListener(
+    (obs, oldVal, newVal) -> System.out.println("Выбран: " + newVal)
+);
+            </pre>
+            <p class="mt-2 text-lg">Список отделов с обработкой выбора.</p>
+        </div>
+
+        <!-- Слайд 8: TreeView -->
+        <div class="slide">
+            <span class="slide-number">Слайд 8</span>
+            <h2>TreeView: Дерево данных</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Показывает иерархию (ветки, листья).</li>
+                <li>Пример: Структура филиалов Ориёнбанка.</li>
+                <li><span class="highlight">Аналогия</span>: Как папки на компьютере.</li>
+            </ul>
+            <img src="https://via.placeholder.com/150x120?text=TreeView" alt="Дерево филиалов">
+        </div>
+
+        <!-- Слайд 9: Код TreeView -->
+        <div class="slide">
+            <span class="slide-number">Слайд 9</span>
+            <h2>Код: TreeView</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+import javafx.scene.control.TreeView;
+import javafx.scene.control.TreeItem;
+
+TreeView<String> treeView = new TreeView<>();
+TreeItem<String> root = new TreeItem<>("Ориёнбанк");
+TreeItem<String> dushanbe = new TreeItem<>("Душанбе");
+TreeItem<String> khujand = new TreeItem<>("Худжанд");
+root.getChildren().addAll(dushanbe, khujand);
+treeView.setRoot(root);
+treeView.getSelectionModel().selectedItemProperty().addListener(
+    (obs, oldVal, newVal) -> System.out.println("Выбран: " + newVal.getValue())
+);
+            </pre>
+            <p class="mt-2 text-lg">Дерево филиалов с выбором.</p>
+        </div>
+
+        <!-- Слайд 10: FXML -->
+        <div class="slide">
+            <span class="slide-number">Слайд 10</span>
+            <h2>FXML: Разметка интерфейса</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">FXML</span>: Описывает интерфейс, как HTML.</li>
+                <li>Упрощает создание сложных окон.</li>
+                <li><span class="highlight">Аналогия</span>: Как план офиса на бумаге.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “FXML-план интерфейса”.</p>
+        </div>
+
+        <!-- Слайд 11: Код FXML -->
+        <div class="slide">
+            <span class="slide-number">Слайд 11</span>
+            <h2>Код: FXML</h2>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<VBox xmlns:fx="http://javafx.com/fxml">
+    <TableView fx:id="employeeTable"/>
+</VBox>
+            </pre>
+            <p class="mt-2 text-lg">Разметка для таблицы сотрудников.</p>
+        </div>
+
+        <!-- Слайд 12: CSS-стилизация -->
+        <div class="slide">
+            <span class="slide-number">Слайд 12</span>
+            <h2>CSS: Красивый дизайн</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Меняет цвета, шрифты, границы.</li>
+                <li>Пример: Синий стиль для таблицы Ориёнбанка.</li>
+                <li><span class="highlight">Аналогия</span>: Как декор в офисе.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+.table-view {
+    -fx-background-color: #e0f2fe;
+    -fx-border-color: #1e40af;
+}
+            </pre>
+        </div>
+
+        <!-- Слайд 13: MVC-паттерн -->
+        <div class="slide">
+            <span class="slide-number">Слайд 13</span>
+            <h2>MVC: Разделение логики</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Model</span>: Данные (список сотрудников).</li>
+                <li><span class="highlight">View</span>: Интерфейс (TableView).</li>
+                <li><span class="highlight">Controller</span>: Логика (обработка кликов).</li>
+                <li><span class="highlight">Аналогия</span>: Как офис: данные, экран, менеджер.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “MVC в JavaFX”.</p>
+        </div>
+
+        <!-- Слайд 14: Property и Data Binding -->
+        <div class="slide">
+            <span class="slide-number">Слайд 14</span>
+            <h2>Property и Data Binding</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Property</span>: Данные, которые следят за изменениями.</li>
+                <li><span class="highlight">Data Binding</span>: Автоматическое обновление интерфейса.</li>
+                <li>Пример: Имя сотрудника меняется — таблица обновляется.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+employee.nameProperty().bind(textField.textProperty());
+            </pre>
+        </div>
+
+        <!-- Слайд 15: Layout Panes -->
+        <div class="slide">
+            <span class="slide-number">Слайд 15</span>
+            <h2>Layout Panes: Компоновка</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">HBox/VBox</span>: Горизонталь/вертикаль.</li>
+                <li><span class="highlight">GridPane</span>: Сетка, как таблица.</li>
+                <li><span class="highlight">BorderPane</span>: Центр, края.</li>
+                <li><span class="highlight">Аналогия</span>: Как расстановка мебели в офисе.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Компоновка интерфейса”.</p>
+        </div>
+
+        <!-- Слайд 16: Когда использовать JavaFX -->
+        <div class="slide">
+            <span class="slide-number">Слайд 16</span>
+            <h2>Когда использовать JavaFX?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Десктопные приложения: Бизнес, утилиты, визуализаторы.</li>
+                <li>Пример: Программа для учёта сотрудников Ориёнбанка.</li>
+                <li><span class="highlight">Не для</span>: Веб (Spring Boot) или мобильных (Kotlin).</li>
+            </ul>
+        </div>
+
+        <!-- Слайд 17: Частые ошибки -->
+        <div class="slide">
+            <span class="slide-number">Слайд 17</span>
+            <h2>Частые ошибки</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>Неправильная привязка данных в TableView.</li>
+                <li>Изменение GUI не из потока JavaFX.</li>
+                <li>Игнорирование Property (ручное обновление).</li>
+            </ul>
+            <div class="task">
+                <p><strong>Вопрос:</strong> Почему нельзя менять GUI из другого потока?</p>
+            </div>
+        </div>
+
+        <!-- Слайд 18: Связь с другими темами -->
+        <div class="slide">
+            <span class="slide-number">Слайд 18</span>
+            <h2>Связь с другими темами</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Коллекции</span>: ObservableList для TableView.</li>
+                <li><span class="highlight">Многопоточность</span>: Platform.runLater для GUI.</li>
+                <li><span class="highlight">ООП</span>: Модели (Employee) для данных.</li>
+            </ul>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-4">
+Platform.runLater(() -> table.getItems().add(new Employee("Алишер", "Менеджер")));
+            </pre>
+        </div>
+
+        <!-- Слайд 19: Как работает JavaFX -->
+        <div class="slide">
+            <span class="slide-number">Слайд 19</span>
+            <h2>Как работает JavaFX?</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li><span class="highlight">Scenegraph</span>: Интерфейс — дерево узлов (кнопки, таблицы).</li>
+                <li>Deitel: GUI должно быть гибким и мощным — JavaFX это воплощает.</li>
+                <li><span class="highlight">Аналогия</span>: Как библиотека, где всё упорядочено.</li>
+            </ul>
+            <p><strong>Визуализация:</strong> Схема: “Scenegraph”.</p>
+        </div>
+
+        <!-- Слайд 20: Итоги и вопросы -->
+        <div class="slide">
+            <span class="slide-number">Слайд 20</span>
+            <h2>Итоги и вопросы</h2>
+            <ul class="list-disc ml-6 mt-4 text-lg">
+                <li>JavaFX: Мощный фреймворк для GUI.</li>
+                <li>Компоненты: TableView, ListView, TreeView.</li>
+                <li>Инструменты: FXML, CSS, MVC, Property.</li>
+                <li>Пример: Управление сотрудниками Ориёнбанка.</li>
+            </ul>
+            <p class="mt-4 text-center text-blue-600 font-bold">Вопросы?</p>
+        </div>
+    </div>
+</body>
+</html>
