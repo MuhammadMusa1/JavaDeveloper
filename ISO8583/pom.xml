@@ -1,0 +1,5 @@
+<dependency>
+    <groupId>com.github.Musa.j8583</groupId>
+    <artifactId>j8583</artifactId>
+    <version>1.16.0</version>
+</dependency>
