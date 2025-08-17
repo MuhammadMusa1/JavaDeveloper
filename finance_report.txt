@@ -1,0 +1,6 @@
+--- Financial Report ---
+Total Income: $1000.00
+  продукт: $1000.00
+Total Expenses: $0.00
+Balance: $1000.00
+Great! Positive balance.
