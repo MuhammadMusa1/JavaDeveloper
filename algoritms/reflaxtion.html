@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рефлексия в Java - Презентация</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #6366f1;
+            --text: #374151;
+            --text-light: #6b7280;
+            --bg: #f8fafc;
+            --bg-light: #ffffff;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --indigo-100: #e0e7ff;
+            --indigo-700: #4338ca;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--indigo-100) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--blue-600), var(--blue-700));
+            color: white;
+            padding: 2rem;
+            border-radius: 16px 16px 0 0;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .presentation {
+            background: var(--bg-light);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .navigation {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: white;
+        }
+
+        .intro {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .tab:hover {
+            background: var(--blue-200);
+            transform: translateY(-1px);
+        }
+
+        .tab.active {
+            background: var(--blue-600);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--blue-700);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .content-box {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-box h3 {
+            color: var(--blue-700);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-box h3.warning {
+            color: var(--warning);
+        }
+
+        .content-box h3.danger {
+            color: var(--danger);
+        }
+
+        .content-box h3.success {
+            color: var(--success);
+        }
+
+        ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin: 0.75rem 0;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #0f172a;
+        }
+
+        pre {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--blue-300);
+        }
+
+        .placeholder {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .placeholder-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        footer {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 16px 16px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+                text-align: center;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="presentation">
+            <header>
+                <h1>Рефлексия в Java</h1>
+                <p class="subtitle">Полное руководство для Junior и Middle разработчиков</p>
+            </header>
+
+            <div class="navigation">
+                <p class="intro">Подробный план презентации по теме рефлексии в Java. Каждый раздел можно раскрыть для просмотра содержания.</p>
+                <div class="tabs">
+                    <button class="tab" data-section="1">Введение</button>
+                    <button class="tab" data-section="2">Основные операции</button>
+                    <button class="tab" data-section="3">Применение на практике</button>
+                    <button class="tab" data-section="4">Ограничения и риски</button>
+                    <button class="tab" data-section="5">Заключение</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Section 1: Введение -->
+                <div id="section-1" class="section">
+                    <h2 class="section-title">Введение</h2>
+                    
+                    <div class="content-box">
+                        <h3>Что такое рефлексия?</h3>
+                        <p><strong>Рефлексия</strong> — это механизм, позволяющий программе анализировать и изменять свою структуру и поведение во время выполнения.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Зачем нужна рефлексия?</h3>
+                        <ul>
+                            <li>Фреймворки (Spring, Hibernate) используют рефлексию для внедрения зависимостей и маппинга объектов</li>
+                            <li>Тестовые фреймворки (JUnit) находят и запускают тесты по аннотациям</li>
+                            <li>Инструменты для сериализации (Gson, Jackson)</li>
+                            <li>Динамическая инспекция классов и объектов</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Основные классы и интерфейсы</h3>
+                        <ul>
+                            <li><code>Class&lt;T&gt;</code> — метаинформация о классе</li>
+                            <li><code>Field</code> — представляет поле класса</li>
+                            <li><code>Method</code> — представляет метод класса</li>
+                            <li><code>Constructor</code> — представляет конструктор класса</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 2: Основные операции -->
+                <div id="section-2" class="section">
+                    <h2 class="section-title">Основные операции</h2>
+                    
+                    <div class="content-box">
+                        <h3>Получение объекта Class</h3>
+                        <pre>
+// Способ 1: через .class
+Class&lt;String&gt; stringClass = String.class;
+
+// Способ 2: через объект
+String str = "hello";
+Class&lt;?&gt; cls = str.getClass();
+
+// Способ 3: через имя класса (динамически)
+try {
+    Class&lt;?&gt; clazz = Class.forName("java.util.ArrayList");
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+}</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Работа с полями</h3>
+                        <pre>
+Field[] fields = MyClass.class.getDeclaredFields();
+for (Field field : fields) {
+    System.out.println("Поле: " + field.getName());
+    field.setAccessible(true); // для доступа к private
+    Object value = field.get(instance);
+    field.set(instance, newValue);
+}</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Работа с методами</h3>
+                        <pre>
+Method[] methods = MyClass.class.getDeclaredMethods();
+for (Method method : methods) {
+    System.out.println("Метод: " + method.getName());
+    if (method.getName().equals("myMethod")) {
+        method.setAccessible(true); // для private
+        Object result = method.invoke(instance, args);
+    }
+}</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Работа с конструкторами</h3>
+                        <pre>
+Constructor&lt;?&gt;[] constructors = MyClass.class.getConstructors();
+Constructor&lt;?&gt; constructor = MyClass.class.getConstructor(String.class);
+MyClass instance = (MyClass) constructor.newInstance("arg");</pre>
+                    </div>
+                </div>
+
+                <!-- Section 3: Применение на практике -->
+                <div id="section-3" class="section">
+                    <h2 class="section-title">Применение на практике</h2>
+                    
+                    <div class="content-box">
+                        <h3>Пример 1: Инспекция класса</h3>
+                        <pre>
+public static void printClassInfo(Class&lt;?&gt; clazz) {
+    System.out.println("Класс: " + clazz.getName());
+    
+    System.out.println("Поля:");
+    for (Field field : clazz.getDeclaredFields()) {
+        System.out.println("  " + field.getType().getSimpleName() + " " + field.getName());
+    }
+    
+    System.out.println("Методы:");
+    for (Method method : clazz.getDeclaredMethods()) {
+        System.out.println("  " + method.getReturnType().getSimpleName() + " " + method.getName());
+    }
+}
+
+// Использование
+printClassInfo(String.class);</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Пример 2: Простой тестовый фреймворк</h3>
+                        <pre>
+// Аннотация
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Test {}
+
+// Тестовый класс
+public class MyTest {
+    @Test
+    public void testAddition() {
+        assert 2 + 2 == 4;
+        System.out.println("Тест прошёл!");
+    }
+}
+
+// Запуск тестов
+public static void runTests(Object testInstance) throws Exception {
+    Method[] methods = testInstance.getClass().getDeclaredMethods();
+    for (Method method : methods) {
+        if (method.isAnnotationPresent(Test.class)) {
+            System.out.println("Запуск теста: " + method.getName());
+            method.setAccessible(true);
+            method.invoke(testInstance);
+        }
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Section 4: Ограничения и риски -->
+                <div id="section-4" class="section">
+                    <h2 class="section-title">Ограничения и риски</h2>
+                    
+                    <div class="content-box">
+                        <h3 class="danger">Производительность</h3>
+                        <p>Рефлексия значительно медленнее обычного вызова:</p>
+                        <ul>
+                            <li>Нет оптимизации со стороны JVM</li>
+                            <li>Проверки безопасности при каждом вызове</li>
+                            <li>Пример: вызов метода через рефлексию может быть в 10-100 раз медленнее</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3 class="danger">Безопасность</h3>
+                        <p>Рефлексия может нарушить инкапсуляцию:</p>
+                        <ul>
+                            <li><code>setAccessible(true)</code> позволяет читать/менять private поля</li>
+                            <li>Это может привести к неожиданному поведению и уязвимостям</li>
+                            <li>Может обойти проверки безопасности (SecurityManager)</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3 class="danger">Читаемость и поддержка</h3>
+                        <ul>
+                            <li>Код становится менее понятным</li>
+                            <li>Сложнее отлаживать</li>
+                            <li>IDE не может помочь с автодополнением и проверкой типов</li>
+                            <li>Ошибки выявляются только во время выполнения</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 5: Заключение -->
+                <div id="section-5" class="section">
+                    <h2 class="section-title">Заключение</h2>
+                    
+                    <div class="content-box">
+                        <h3 class="success">Резюме</h3>
+                        <p>Рефлексия — мощный инструмент, позволяющий работать с классами и объектами динамически.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3 class="success">Когда использовать</h3>
+                        <ul>
+                            <li>Создание фреймворков и библиотек</li>
+                            <li>Сериализация/десериализация объектов</li>
+                            <li>Тестирование (поиск и запуск тестов)</li>
+                            <li>DI-контейнеры (внедрение зависимостей)</li>
+                            <li>Инструменты анализа кода</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3 class="success">Когда избегать</h3>
+                        <ul>
+                            <li>Обычное бизнес-приложение</li>
+                            <li>Критичные по производительности участки кода</li>
+                            <li>Если можно использовать обычные вызовы методов</li>
+                            <li>Если есть альтернативы (интерфейсы, абстрактные классы)</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: var(--blue-50); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--blue-600); margin-top: 1.5rem;">
+                        <p style="font-weight: 600; color: var(--blue-700);">
+                            <strong>Совет:</strong> Рефлексия — это инструмент для специальных случаев, а не для повседневного программирования.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Placeholder -->
+                <div id="placeholder" class="section active">
+                    <div class="placeholder">
+                        <div class="placeholder-icon">🔍</div>
+                        <p class="placeholder-text">Выберите раздел из меню выше, чтобы увидеть содержание</p>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                Презентация по рефлексии в Java • Подходит для разработчиков уровня Junior-Middle
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const sections = document.querySelectorAll('.section');
+            const placeholder = document.getElementById('placeholder');
+
+            // Hide all sections except placeholder
+            sections.forEach(section => {
+                if (section.id !== 'placeholder') {
+                    section.classList.remove('active');
+                }
+            });
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide placeholder
+                    placeholder.classList.remove('active');
+                    
+                    // Hide all sections
+                    sections.forEach(section => {
+                        if (section.id !== 'placeholder') {
+                            section.classList.remove('active');
+                        }
+                    });
+                    
+                    // Show selected section
+                    const sectionId = this.getAttribute('data-section');
+                    const selectedSection = document.getElementById(`section-${sectionId}`);
+                    if (selectedSection) {
+                        selectedSection.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

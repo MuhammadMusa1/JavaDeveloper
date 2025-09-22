@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Основы Spring и Spring MVC</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #6366f1;
+            --text: #374151;
+            --text-light: #6b7280;
+            --bg: #f8fafc;
+            --bg-light: #ffffff;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --green-50: #ecfdf5;
+            --green-100: #d1fae5;
+            --green-600: #059669;
+            --green-700: #047857;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --indigo-100: #e0e7ff;
+            --indigo-700: #4338ca;
+            --yellow-50: #fffbeb;
+            --yellow-100: #fef3c7;
+            --yellow-600: #d97706;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--indigo-100) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--blue-600), var(--blue-700));
+            color: white;
+            padding: 2rem;
+            border-radius: 16px 16px 0 0;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .presentation {
+            background: var(--bg-light);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .navigation {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: white;
+        }
+
+        .intro {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .tab:hover {
+            background: var(--blue-200);
+            transform: translateY(-1px);
+        }
+
+        .tab.active {
+            background: var(--blue-600);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--blue-700);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .content-box {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-box h3 {
+            color: var(--blue-700);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-box h3.success {
+            color: var(--success);
+        }
+
+        .content-box h3.warning {
+            color: var(--warning);
+        }
+
+        ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin: 0.75rem 0;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #0f172a;
+        }
+
+        pre {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--blue-300);
+        }
+
+        .placeholder {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .placeholder-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        footer {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 16px 16px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+                text-align: center;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="presentation">
+            <header>
+                <h1>Основы Spring и Spring MVC</h1>
+                <p class="subtitle">Полное руководство для начинающих и Junior разработчиков</p>
+            </header>
+
+            <div class="navigation">
+                <p class="intro">Подробный план презентации по теме Spring и Spring MVC. Каждый раздел можно раскрыть для просмотра содержания.</p>
+                <div class="tabs">
+                    <button class="tab" data-section="1">Введение: Что такое Spring?</button>
+                    <button class="tab" data-section="2">Основы Spring MVC</button>
+                    <button class="tab" data-section="3">Архитектура и поток запросов</button>
+                    <button class="tab" data-section="4">Ключевые компоненты и аннотации</button>
+                    <button class="tab" data-section="5">Простой пример</button>
+                    <button class="tab" data-section="6">Заключение</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Section 1: Введение -->
+                <div id="section-1" class="section">
+                    <h2 class="section-title">Введение: Что такое Spring?</h2>
+                    
+                    <div class="content-box">
+                        <h3>Краткая история и назначение</h3>
+                        <p>Spring — это мощный фреймворк для разработки Java-приложений, созданный в 2003 году. Он упрощает разработку enterprise-приложений, предоставляя готовые решения для типичных задач.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Инверсия управления (IoC)</h3>
+                        <p><strong>IoC</strong> — это принцип, при котором управление объектами передается фреймворку, а не программисту. Вместо того чтобы создавать объекты вручную, вы описываете, какие объекты нужны, и Spring сам создает и управляет ими.</p>
+                        <p>Пример: вместо <code>new UserService()</code> Spring сам создаст и предоставит объект.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Внедрение зависимостей (DI)</h3>
+                        <p><strong>DI</strong> — это способ реализации IoC, при котором зависимости (объекты, от которых зависит класс) автоматически "внедряются" в класс.</p>
+                        <p>Пример: если <code>UserController</code> зависит от <code>UserService</code>, Spring сам подставит нужный объект.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Ключевые термины</h3>
+                        <ul>
+                            <li><strong>IoC-контейнер</strong> — "сердце" Spring, который управляет жизненным циклом объектов</li>
+                            <li><strong>Bean</strong> — объект, созданный и управляемый Spring-контейнером</li>
+                            <li><strong>ApplicationContext</strong> — интерфейс, представляющий контекст приложения и контейнер бинов</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 2: Основы Spring MVC -->
+                <div id="section-2" class="section">
+                    <h2 class="section-title">Основы Spring MVC</h2>
+                    
+                    <div class="content-box">
+                        <h3>Что такое MVC?</h3>
+                        <p><strong>MVC (Model-View-Controller)</strong> — архитектурный паттерн, который разделяет приложение на три компонента:</p>
+                        <ul>
+                            <li><strong>Model</strong> — данные и бизнес-логика</li>
+                            <li><strong>View</strong> — представление (интерфейс пользователя)</li>
+                            <li><strong>Controller</strong> — обработчик запросов, связующее звено между Model и View</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Роли компонентов</h3>
+                        <ul>
+                            <li><strong>Model</strong>: хранит данные, которые нужно отобразить (например, список пользователей)</li>
+                            <li><strong>View</strong>: отображает данные пользователю (HTML-страница, шаблон)</li>
+                            <li><strong>Controller</strong>: получает HTTP-запрос, обрабатывает его, получает данные из Model и передает их View</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Зачем использовать Spring MVC?</h3>
+                        <ul>
+                            <li>Четкое разделение ответственности</li>
+                            <li>Упрощенная разработка веб-приложений</li>
+                            <li>Гибкость и расширяемость</li>
+                            <li>Отличная интеграция с другими компонентами Spring</li>
+                            <li>Простота тестирования отдельных компонентов</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 3: Архитектура и поток запросов -->
+                <div id="section-3" class="section">
+                    <h2 class="section-title">Архитектура и поток запросов</h2>
+                    
+                    <div class="content-box">
+                        <h3>DispatcherServlet</h3>
+                        <p><strong>DispatcherServlet</strong> — центральный компонент Spring MVC, который является "фасадом" для всей обработки запросов.</p>
+                        <p>Он получает все входящие HTTP-запросы и распределяет их по соответствующим компонентам.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Путь HTTP-запроса</h3>
+                        <ol style="list-style: decimal; padding-left: 1.5rem; margin: 0.75rem 0;">
+                            <li>Пользователь отправляет HTTP-запрос (например, GET /users)</li>
+                            <li>Запрос попадает в <code>DispatcherServlet</code></li>
+                            <li>DispatcherServlet определяет, какой <code>HandlerMapping</code> подходит для этого URL</li>
+                            <li>Находит соответствующий <code>Controller</code> и метод</li>
+                            <li>Вызывает метод контроллера, передавая параметры</li>
+                            <li>Контроллер обрабатывает запрос и возвращает имя представления (view name)</li>
+                            <li>DispatcherServlet передает результат <code>ViewResolver</code></li>
+                            <li>ViewResolver находит нужный шаблон (например, HTML-файл)</li>
+                            <li>View отображает данные и возвращает HTML-ответ пользователю</li>
+                        </ol>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Ключевые компоненты</h3>
+                        <ul>
+                            <li><strong>HandlerMapping</strong> — определяет, какой контроллер обработает запрос</li>
+                            <li><strong>Controller</strong> — обрабатывает запрос и возвращает результат</li>
+                            <li><strong>ModelAndView</strong> — содержит данные (Model) и имя представления (View)</li>
+                            <li><strong>ViewResolver</strong> — преобразует имя представления в фактический View</li>
+                            <li><strong>View</strong> — отображает данные пользователю</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 4: Ключевые компоненты и аннотации -->
+                <div id="section-4" class="section">
+                    <h2 class="section-title">Ключевые компоненты и аннотации</h2>
+                    
+                    <div class="content-box">
+                        <h3>Контроллеры: @Controller и @RequestMapping</h3>
+                        <pre>
+@Controller
+public class HomeController {
+    
+    @RequestMapping("/") // Обработка запросов к корню
+    public String home() {
+        return "home"; // Имя шаблона (home.html)
+    }
+}</pre>
+                        <p><code>@Controller</code> — помечает класс как компонент Spring MVC, который обрабатывает HTTP-запросы.</p>
+                        <p><code>@RequestMapping</code> — указывает, какой URL должен обрабатываться методом.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>HTTP-методы: @GetMapping, @PostMapping</h3>
+                        <pre>
+@Controller
+public class UserController {
+    
+    @GetMapping("/users")
+    public String getUsers(Model model) {
+        // Получить список пользователей
+        model.addAttribute("users", userService.getAllUsers());
+        return "users";
+    }
+    
+    @PostMapping("/users")
+    public String createUser(@RequestParam String name) {
+        userService.createUser(name);
+        return "redirect:/users";
+    }
+}</pre>
+                        <p>Специализированные аннотации для разных HTTP-методов:</p>
+                        <ul>
+                            <li><code>@GetMapping</code> — GET-запросы</li>
+                            <li><code>@PostMapping</code> — POST-запросы</li>
+                            <li><code>@PutMapping</code> — PUT-запросы</li>
+                            <li><code>@DeleteMapping</code> — DELETE-запросы</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Передача данных: Model</h3>
+                        <pre>
+@GetMapping("/profile")
+public String profile(Model model) {
+    User user = userService.getCurrentUser();
+    model.addAttribute("user", user);
+    model.addAttribute("title", "Профиль пользователя");
+    return "profile";
+}</pre>
+                        <p><code>Model</code> — это контейнер для данных, которые нужно передать в представление.</p>
+                        <p>В шаблоне (например, Thymeleaf) данные доступны по именам атрибутов.</p>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Представления: ViewResolver и шаблонизаторы</h3>
+                        <p><strong>ViewResolver</strong> — компонент, который преобразует логическое имя представления (например, "home") в фактический ресурс (например, <code>home.html</code>).</p>
+                        <p>Популярные шаблонизаторы:</p>
+                        <ul>
+                            <li><strong>Thymeleaf</strong> — современный шаблонизатор для HTML</li>
+                            <li><strong>JSP</strong> — классический подход (Java Server Pages)</li>
+                            <li><strong>Freemarker</strong>, <strong>Velocity</strong> — альтернативные шаблонизаторы</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 5: Простой пример -->
+                <div id="section-5" class="section">
+                    <h2 class="section-title">Простой пример (мини-приложение)</h2>
+                    
+                    <div class="content-box">
+                        <h3>Шаг 1: Создание контроллера</h3>
+                        <pre>
+@Controller
+public class HelloController {
+    
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("message", "Добро пожаловать в Spring MVC!");
+        model.addAttribute("currentTime", new Date());
+        return "index";
+    }
+    
+    @GetMapping("/hello/{name}")
+    public String hello(@PathVariable String name, Model model) {
+        model.addAttribute("name", name);
+        return "hello";
+    }
+}</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Шаг 2: Создание шаблонов (Thymeleaf)</h3>
+                        <p><strong>resources/templates/index.html</strong></p>
+                        <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns:th="http://www.thymeleaf.org"&gt;
+&lt;head&gt;
+    &lt;title&gt;Главная&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 th:text="${message}"&gt;&lt;/h1&gt;
+    &lt;p&gt;Текущее время: &lt;span th:text="${currentTime}"&gt;&lt;/span&gt;&lt;/p&gt;
+    &lt;a href="/hello/World"&gt;Поприветствовать World&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Шаг 3: Конфигурация (application.properties)</h3>
+                        <pre>
+# Настройка Thymeleaf
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.mode=HTML
+
+# Настройка логирования
+logging.level.org.springframework=INFO</pre>
+                    </div>
+
+                    <div class="content-box">
+                        <h3>Как это работает?</h3>
+                        <ol style="list-style: decimal; padding-left: 1.5rem; margin: 0.75rem 0;">
+                            <li>Пользователь заходит на <code>http://localhost:8080/</code></li>
+                            <li>DispatcherServlet направляет запрос методу <code>index()</code></li>
+                            <li>Метод добавляет данные в Model и возвращает имя шаблона "index"</li>
+                            <li>ViewResolver находит файл <code>index.html</code> в папке <code>templates</code></li>
+                            <li>Thymeleaf обрабатывает шаблон, подставляя значения из Model</li>
+                            <li>Пользователь видит готовую HTML-страницу</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Section 6: Заключение -->
+                <div id="section-6" class="section">
+                    <h2 class="section-title">Заключение</h2>
+                    
+                    <div class="content-box">
+                        <h3 class="success">Основные преимущества Spring MVC</h3>
+                        <ul>
+                            <li><strong>Модульность</strong> — четкое разделение компонентов (MVC)</li>
+                            <li><strong>Гибкость</strong> — легко настраивается и расширяется</li>
+                            <li><strong>Простота тестирования</strong> — контроллеры можно тестировать как обычные классы</li>
+                            <li><strong>Богатая экосистема</strong> — интеграция с другими модулями Spring (Security, Data, Boot)</li>
+                            <li><strong>Поддержка современных практик</strong> — REST, WebSocket, реактивность</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-box">
+                        <h3 class="success">Краткое резюме</h3>
+                        <ul>
+                            <li>Spring — мощный фреймворк для Java-приложений с IoC и DI</li>
+                            <li>Spring MVC — модуль для веб-разработки на основе паттерна MVC</li>
+                            <li>DispatcherServlet — центральный компонент, управляющий потоком запросов</li>
+                            <li>Аннотации (<code>@Controller</code>, <code>@GetMapping</code>) упрощают разработку</li>
+                            <li>Model передает данные от контроллера к представлению</li>
+                            <li>ViewResolver и шаблонизаторы (Thymeleaf) отображают данные пользователю</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: var(--green-50); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--green-600); margin-top: 1.5rem;">
+                        <p style="font-weight: 600; color: var(--green-700);">
+                            <strong>Совет:</strong> Начните с простых примеров и постепенно изучайте более сложные возможности Spring MVC. Практика — ключ к успеху!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Placeholder -->
+                <div id="placeholder" class="section active">
+                    <div class="placeholder">
+                        <div class="placeholder-icon">🚀</div>
+                        <p class="placeholder-text">Выберите раздел из меню выше, чтобы увидеть содержание</p>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                Презентация по основам Spring и Spring MVC • Подходит для начинающих и Junior разработчиков
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const sections = document.querySelectorAll('.section');
+            const placeholder = document.getElementById('placeholder');
+
+            // Hide all sections except placeholder
+            sections.forEach(section => {
+                if (section.id !== 'placeholder') {
+                    section.classList.remove('active');
+                }
+            });
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide placeholder
+                    placeholder.classList.remove('active');
+                    
+                    // Hide all sections
+                    sections.forEach(section => {
+                        if (section.id !== 'placeholder') {
+                            section.classList.remove('active');
+                        }
+                    });
+                    
+                    // Show selected section
+                    const sectionId = this.getAttribute('data-section');
+                    const selectedSection = document.getElementById(`section-${sectionId}`);
+                    if (selectedSection) {
+                        selectedSection.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
